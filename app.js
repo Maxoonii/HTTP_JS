@@ -3,7 +3,7 @@ const path = require('path');
 const list = [];
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3888;
 
 const app = express();
 
@@ -16,13 +16,12 @@ app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname+'/index.html'));
 });
 
-app.get('/students', (req, res) =>{
+app.get('/zam', (req, res) =>{
     res.json(list);
 });
 
-app.put('/students', (req, res) =>{
-    if('id' in req.body && 'fio' in req.body && 'course' in req.body
-        && 'spec' in req.body && 'number' in req.body)
+app.put('/zam', (req, res) =>{
+    if('id' in req.body && 'zam' in req.body )
     {
         list.push(req.body);
         res.status(201);
@@ -31,9 +30,8 @@ app.put('/students', (req, res) =>{
         res.status(400);
 });
 
-app.post('/students', (req, res) =>{
-    if('id' in req.body && 'fio' in req.body && 'course' in req.body
-        && 'spec' in req.body && 'number' in req.body)
+app.post('/zam', (req, res) =>{
+    if('id' in req.body && 'zam' in req.body )
     {
         let i = 0;
         for(; i < list.length; i++)
@@ -42,10 +40,7 @@ app.post('/students', (req, res) =>{
                 
         if(i < list.length)
         {
-            list[i].fio = req.body.fio;
-            list[i].course = req.body.course;
-            list[i].spec = req.body.spec;
-            list[i].number = req.body.number;
+            list[i].zam = req.body.zam;
             res.status(202);
         }
         else
@@ -55,7 +50,7 @@ app.post('/students', (req, res) =>{
         res.status(400);
 });
 
-app.delete('/students', (req, res) =>{
+app.delete('/zam', (req, res) =>{
     for(let i = 0; i < list.length; i++)
         if(req.body.indexOf(list[i].id) != -1)
             list.splice(i--, 1);

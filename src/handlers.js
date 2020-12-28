@@ -1,4 +1,4 @@
-const addButtonElem = document.querySelector('#add-student-button');
+const addButtonElem = document.querySelector('#add-tx-button');
 addButtonElem.addEventListener('click', () => {
     if(document.forms[0].dataset.id != '-1')
     {
@@ -24,12 +24,11 @@ closeButtonElem.addEventListener('click', () => {
 });
 
 document.forms[0].onsubmit = () =>{
-    const fio = document.querySelector('#student-fio');
-    const spec = document.querySelector('#student-spec');
-    const course = document.querySelector('#student-course');
-    const num = document.querySelector('#student-number');
+    const zam = document.querySelector('#zamet-tx');
+    
+    
 
-    if(fio.value == '' || spec.value == '' || num.value == '')
+    if(zam.value == '' )
     {
         alert('Введите все необходимые данные');
         return false;
@@ -42,42 +41,35 @@ document.forms[0].onsubmit = () =>{
         .then(result =>{
             const newRow = document.createElement('tr');
             newRow.innerHTML = `<td>${result}</td>
-                                <td>${fio.value}</td>
-                                <td>${course.value}</td>
-                                <td>${spec.value}</td>
-                                <td>${num.value}</td>
+                                <td>${zam.value}</td>
                                 <td><input type="button" value="Изменить" 
                                     data-id="${result}" onclick="EditHandler(this)"/></td>
                                 <td><input type="checkbox" data-id="${result}"/></td>`;
             document.querySelector('#table-body').append(newRow);
-            fetch('/students', 
+            fetch('/zam', 
             {
                 method: 'PUT', 
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify({id: result, 
-                    fio: fio.value,
-                    course: course.value,
-                    spec: spec.value,
-                    number: num.value})
+                   zam: zam.value,
+                    })
             });
             document.forms[0].reset();
         });
     }
     else
     {
-        fetch('/students', 
+        fetch('/zam', 
         {
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({id: document.forms[0].dataset.id, 
-                fio: fio.value,
-                course: course.value,
-                spec: spec.value,
-                number: num.value})
+                zam: zam.value
+                })
         });
 
         const rows = document.querySelector('#table-body').querySelectorAll('tr');
@@ -87,10 +79,8 @@ document.forms[0].onsubmit = () =>{
                 break;
 
         const cells = rows[i].querySelectorAll('td');
-        cells[1].innerHTML = fio.value;
-        cells[2].innerHTML = course.value;
-        cells[3].innerHTML = spec.value;
-        cells[4].innerHTML = num.value;
+        cells[1].innerHTML = zam.value;
+     
 
         document.forms[0].reset();
         document.forms[0].dataset.id = '-1';
@@ -99,7 +89,7 @@ document.forms[0].onsubmit = () =>{
     return false;
 };
 
-const deleteButtonElem = document.querySelector('#delete-student-button');
+const deleteButtonElem = document.querySelector('#delete-tx-button');
 deleteButtonElem.addEventListener('click', () =>{
     const a = [];
     const rows = document.querySelector('#table-body').querySelectorAll('tr');
@@ -119,7 +109,7 @@ deleteButtonElem.addEventListener('click', () =>{
         return;
     }
     
-    fetch('/students', 
+    fetch('/zam', 
         {
             method: 'DELETE', 
             headers: {
@@ -136,8 +126,6 @@ function EditHandler(elem)
             document.forms[0].dataset.id = elem.dataset.id;
             document.querySelector('#confirm-button').value = 'Применить';
             const elems = elem.parentElement.parentElement.querySelectorAll('td');
-            document.querySelector('#student-fio').value = elems[1].innerHTML;
-            document.querySelector('#student-course').value = elems[2].innerHTML;
-            document.querySelector('#student-spec').value = elems[3].innerHTML;
-            document.querySelector('#student-number').value = elems[4].innerHTML;
+            document.querySelector('#zamet-tx').value = elems[1].innerHTML;
+      
         }
